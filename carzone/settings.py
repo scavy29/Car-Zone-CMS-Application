@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import dj_database_url
 
+from pathlib import Path
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+DATABASE_URL="postgresql://postgres:m2VWjbyek1fmTXkbqpZ4@containers-us-west-147.railway.app:7008/railway"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -23,10 +26,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '934nw3r62@!m0^ksgw3#31tntglnr%td+-_b89xpu2@q2zqv=d'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['floating-badlands-41165.herokuapp.com', 'carzoneapp.co', 'www.carzoneapp.co','127.0.0.1:8000','127.0.0.1']
+
 
 LOGIN_REDIRECT_URL = 'dashboard'
 
@@ -43,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'ckeditor',
     'django.contrib.humanize',
@@ -102,9 +108,10 @@ WSGI_APPLICATION = 'carzone.wsgi.application'
 #     }
 # }
 
+DATABASES = {'default': dj_database_url.config(default=DATABASE_URL,conn_max_age=1800),
+}
 
 # DATABASES = {'default': dj_database_url.config(default='postgres://postgres:######@localhost/carzone_db')}
-DATABASES = {'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))}
 
 
 
@@ -143,6 +150,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"     #Whitenoise
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
